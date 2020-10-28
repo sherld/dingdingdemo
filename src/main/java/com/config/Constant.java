@@ -7,7 +7,7 @@ public class Constant {
     /**
      * 企业corpid, 需要修改成开发者所在企业
      */
-    public static final String CORP_ID = "***";
+    public static final String CORP_ID = "ding280bd794307b29944ac5d6980864d335";
     /**
      * 应用的AppKey，登录开发者后台，点击应用管理，进入应用详情可见
      */
