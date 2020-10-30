@@ -8,12 +8,11 @@ import com.config.URLConstant;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiCallBackDeleteCallBackRequest;
-import com.dingtalk.api.request.OapiCallBackGetCallBackRequest;
 import com.dingtalk.api.request.OapiCallBackRegisterCallBackRequest;
-import com.dingtalk.api.response.OapiCallBackDeleteCallBackResponse;
 import com.dingtalk.api.response.OapiCallBackRegisterCallBackResponse;
 import com.dingtalk.oapi.lib.aes.DingTalkEncryptor;
 import com.dingtalk.oapi.lib.aes.Utils;
+import com.handler.CallbackHandler;
 import com.util.AccessTokenUtil;
 import com.util.MessageUtil;
 import org.slf4j.Logger;
@@ -57,6 +56,12 @@ public class CallbackController {
      */
     private static final String CALLBACK_RESPONSE_SUCCESS = "success";
 
+    private CallbackHandler callbackHandler;
+
+    public CallbackController(CallbackHandler callbackHandler) {
+        this.callbackHandler = callbackHandler;
+    }
+
 
     @RequestMapping(value = "/callback", method = RequestMethod.POST)
     @ResponseBody
@@ -77,20 +82,22 @@ public class CallbackController {
             JSONObject obj = JSON.parseObject(plainText);
 
             //根据回调数据类型做不同的业务处理
-            String eventType = obj.getString("EventType");
-            if (BPMS_TASK_CHANGE.equals(eventType)) {
-                bizLogger.info("收到审批任务进度更新: " + plainText);
-                //todo: 实现审批的业务逻辑，如发消息
-            } else if (BPMS_INSTANCE_CHANGE.equals(eventType)) {
-                bizLogger.info("收到审批实例状态更新: " + plainText);
-                //todo: 实现审批的业务逻辑，如发消息
-                String processInstanceId = obj.getString("processInstanceId");
-                if (obj.containsKey("result") && obj.getString("result").equals("agree")) {
-                    MessageUtil.sendMessageToOriginator(processInstanceId);
-                }
-            } else {
-                // 其他类型事件处理
-            }
+//            String eventType = obj.getString("EventType");
+//            if (BPMS_TASK_CHANGE.equals(eventType)) {
+//                bizLogger.info("收到审批任务进度更新: " + plainText);
+//                //todo: 实现审批的业务逻辑，如发消息
+//            } else if (BPMS_INSTANCE_CHANGE.equals(eventType)) {
+//                bizLogger.info("收到审批实例状态更新: " + plainText);
+//                //todo: 实现审批的业务逻辑，如发消息
+//                String processInstanceId = obj.getString("processInstanceId");
+//                if (obj.containsKey("result") && obj.getString("result").equals("agree")) {
+//                    MessageUtil.sendMessageToOriginator(processInstanceId);
+//                }
+//            } else {
+//                // 其他类型事件处理
+//            }
+
+            callbackHandler.parse(obj);
 
             // 返回success的加密信息表示回调处理成功
             return dingTalkEncryptor.getEncryptedMap(CALLBACK_RESPONSE_SUCCESS, System.currentTimeMillis(), Utils.getRandomStr(8));

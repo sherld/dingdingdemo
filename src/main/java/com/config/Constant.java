@@ -41,4 +41,9 @@ public class Constant {
      * 回调host
      */
     public static final String CALLBACK_URL_HOST = "***";
+
+    /**
+     * 出差process_code
+     */
+    public static final String PROCESS_CODE_TRIP = "PROC-8AC47BC1-8EEA-4F3E-9AEA-AE8E847DA811";
 }
