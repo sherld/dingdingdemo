@@ -52,10 +52,9 @@ public class ApprovalService {
 
         List<OapiProcessinstanceGetResponse.FormComponentValueVo> formComponentValueVos = instance.getFormComponentValues();
         for (OapiProcessinstanceGetResponse.FormComponentValueVo formComponentValueVo : formComponentValueVos) {
-            if (formComponentValueVo.getName().equals("外出事由")) {
+            if ("外出事由".equals(formComponentValueVo.getName())) {
                 reason = formComponentValueVo.getValue();
-            }
-            if (formComponentValueVo.getName().equals("外出")) {
+            } else if ("外出".equals(formComponentValueVo.getName())) {
                 String value = formComponentValueVo.getValue();
                 JSONArray outSuite = JSON.parseArray(value);
                 for (int i = 0; i < outSuite.size(); i++) {
