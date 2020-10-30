@@ -44,8 +44,7 @@ public class ApprovalService {
     }
 
     public void parseOutInstance(OapiProcessinstanceGetResponse.ProcessInstanceTopVo instance) {
-        logger.debug("Calling ApprovalService.parseOutInstance()");
-        logger.debug("Instance data: " + JSON.toJSONString(instance));
+        logger.info("Instance data: " + JSON.toJSONString(instance));
 
         String reason = null;
         LocalDate startTime = null;
