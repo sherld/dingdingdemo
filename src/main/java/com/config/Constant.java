@@ -45,5 +45,5 @@ public class Constant {
     /**
      * 出差process_code
      */
-    public static final String PROCESS_CODE_TRIP = "PROC-8AC47BC1-8EEA-4F3E-9AEA-AE8E847DA811";
+    public static final String PROCESS_CODE_TRIP = "PROC-F7DE4D75-F477-4647-B89F-3B49307F5AC9";
 }
