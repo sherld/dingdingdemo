@@ -20,7 +20,7 @@ public class CallbackHandler {
     }
 
     public void parse(JSONObject event) {
-        logger.info("Calling CallbackHandler.parse()");
+        logger.info("Event body: " + event.toJSONString());
         String eventType = event.getString("EventType");
         String type = event.getString("type");
         if ("bpms_instance_change".equals(eventType) && "finish".equals(type)) {
