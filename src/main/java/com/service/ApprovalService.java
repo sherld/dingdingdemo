@@ -8,13 +8,16 @@ import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiProcessinstanceGetRequest;
 import com.dingtalk.api.response.OapiProcessinstanceGetResponse;
+import com.model.SFEvent;
 import com.util.AccessTokenUtil;
 import com.util.LogFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Service
@@ -43,12 +46,12 @@ public class ApprovalService {
         }
     }
 
-    public void parseOutInstance(OapiProcessinstanceGetResponse.ProcessInstanceTopVo instance) {
+    public SFEvent parseOutInstance(OapiProcessinstanceGetResponse.ProcessInstanceTopVo instance) {
         logger.info("Instance data: " + JSON.toJSONString(instance));
 
         String reason = null;
-        LocalDate startTime = null;
-        LocalDate endTime = null;
+        ZonedDateTime startTime = null;
+        ZonedDateTime endTime = null;
 
         List<OapiProcessinstanceGetResponse.FormComponentValueVo> formComponentValueVos = instance.getFormComponentValues();
         for (OapiProcessinstanceGetResponse.FormComponentValueVo formComponentValueVo : formComponentValueVos) {
@@ -63,18 +66,20 @@ public class ApprovalService {
                     String label = props.getString("label");
                     if (label.equals("开始时间")) {
                         String itemValue = item.getString("value");
-                        startTime = LocalDate.parse(itemValue);
+                        startTime = LocalDateTime.parse(itemValue+"T00:00:00").atZone(ZoneId.of("Asia/Shanghai"));
                     } else if (label.equals("结束时间")) {
                         String itemValue = item.getString("value");
-                        endTime = LocalDate.parse(itemValue);
+                        endTime = LocalDateTime.parse(itemValue+"T23:59:59").atZone(ZoneId.of("Asia/Shanghai"));
                     }
                 }
             }
         }
 
-        logger.info("OutInstance reason: " + reason);
-        logger.info("OutInstance start time: " + startTime.toString());
-        logger.info("OutInstance end time: " + endTime.toString());
+        return SFEvent.builder()
+                .description(reason)
+                .startTime(startTime)
+                .endTime(endTime)
+                .build();
     }
 
 }

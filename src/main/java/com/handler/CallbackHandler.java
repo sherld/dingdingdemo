@@ -1,9 +1,11 @@
 package com.handler;
 
 import com.alibaba.fastjson.JSONObject;
-import com.config.Constant;
+import com.config.DingDingConstant;
 import com.dingtalk.api.response.OapiProcessinstanceGetResponse;
+import com.model.SFEvent;
 import com.service.ApprovalService;
+import com.service.SalesforceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -15,8 +17,11 @@ public class CallbackHandler {
 
     private ApprovalService approvalService;
 
-    public CallbackHandler(ApprovalService approvalService) {
+    private SalesforceService salesforceService;
+
+    public CallbackHandler(ApprovalService approvalService, SalesforceService salesforceService) {
         this.approvalService = approvalService;
+        this.salesforceService = salesforceService;
     }
 
     public void parse(JSONObject event) {
@@ -27,15 +32,16 @@ public class CallbackHandler {
             // Approved
             if (event.containsKey("result") && event.getString("result").equals("agree")) {
                 String processCode = event.getString("processCode");
-                if (Constant.PROCESS_CODE_TRIP.equals(processCode)) {
-                    processOut(event.getString("processInstanceId"));
+                if (DingDingConstant.PROCESS_CODE_TRIP.equals(processCode)) {
+                    processOutInstance(event.getString("processInstanceId"));
                 }
             }
         }
     }
 
-    private void processOut(String processInstanceId) {
+    public void processOutInstance(String processInstanceId) {
         OapiProcessinstanceGetResponse.ProcessInstanceTopVo outInstance = approvalService.getById(processInstanceId);
-        approvalService.parseOutInstance(outInstance);
+        SFEvent sfEvent = approvalService.parseOutInstance(outInstance);
+        salesforceService.sync(sfEvent);
     }
 }

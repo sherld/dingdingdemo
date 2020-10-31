@@ -41,4 +41,14 @@ public class URLConstant {
      */
     public static final String REGISTER_CALLBACK = "https://oapi.dingtalk.com/call_back/register_call_back";
 
+
+    /**
+     * Salesforce token url
+     */
+    public static final String SF_TOKEN_URL = "https://login.salesforce.com/services/oauth2/token";
+
+    /**
+     * Salesforce DingDing integration interface
+     */
+    public static final String SF_DINGDING_INTEGRATION_URL = "https://playful-badger-rdlq0q-dev-ed.my.salesforce.com/services/apexrest/integration/dingding";
 }

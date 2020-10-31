@@ -2,7 +2,7 @@ package com.controller;
 
 import com.alibaba.fastjson.JSON;
 
-import com.config.Constant;
+import com.config.DingDingConstant;
 import com.config.URLConstant;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
@@ -51,7 +51,7 @@ public class ProcessinstanceController {
 		try {
 			DefaultDingTalkClient client = new DefaultDingTalkClient(URLConstant.URL_PROCESSINSTANCE_START);
 			OapiProcessinstanceCreateRequest request = new OapiProcessinstanceCreateRequest();
-			request.setProcessCode(Constant.PROCESS_CODE);
+			request.setProcessCode(DingDingConstant.PROCESS_CODE);
 
 			request.setFormComponentValues(processInstance.generateForms());
 

@@ -3,7 +3,7 @@ package com.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
-import com.config.Constant;
+import com.config.DingDingConstant;
 import com.config.URLConstant;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
@@ -14,7 +14,6 @@ import com.dingtalk.oapi.lib.aes.DingTalkEncryptor;
 import com.dingtalk.oapi.lib.aes.Utils;
 import com.handler.CallbackHandler;
 import com.util.AccessTokenUtil;
-import com.util.MessageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -73,29 +72,13 @@ public class CallbackController {
 
         String params = " signature:"+signature + " timestamp:"+timestamp +" nonce:"+nonce+" json:"+json;
         try {
-            DingTalkEncryptor dingTalkEncryptor = new DingTalkEncryptor(Constant.TOKEN, Constant.ENCODING_AES_KEY,
-                Constant.CORP_ID);
+            DingTalkEncryptor dingTalkEncryptor = new DingTalkEncryptor(DingDingConstant.TOKEN, DingDingConstant.ENCODING_AES_KEY,
+                DingDingConstant.CORP_ID);
 
             //从post请求的body中获取回调信息的加密数据进行解密处理
             String encryptMsg = json.getString("encrypt");
             String plainText = dingTalkEncryptor.getDecryptMsg(signature, timestamp, nonce, encryptMsg);
             JSONObject obj = JSON.parseObject(plainText);
-
-            //根据回调数据类型做不同的业务处理
-//            String eventType = obj.getString("EventType");
-//            if (BPMS_TASK_CHANGE.equals(eventType)) {
-//                bizLogger.info("收到审批任务进度更新: " + plainText);
-//                //todo: 实现审批的业务逻辑，如发消息
-//            } else if (BPMS_INSTANCE_CHANGE.equals(eventType)) {
-//                bizLogger.info("收到审批实例状态更新: " + plainText);
-//                //todo: 实现审批的业务逻辑，如发消息
-//                String processInstanceId = obj.getString("processInstanceId");
-//                if (obj.containsKey("result") && obj.getString("result").equals("agree")) {
-//                    MessageUtil.sendMessageToOriginator(processInstanceId);
-//                }
-//            } else {
-//                // 其他类型事件处理
-//            }
 
             callbackHandler.parse(obj);
 
@@ -119,9 +102,9 @@ public class CallbackController {
         // 重新为企业注册回调
         client = new DefaultDingTalkClient(URLConstant.REGISTER_CALLBACK);
         OapiCallBackRegisterCallBackRequest registerRequest = new OapiCallBackRegisterCallBackRequest();
-        registerRequest.setUrl(Constant.CALLBACK_URL_HOST + "/callback");
-        registerRequest.setAesKey(Constant.ENCODING_AES_KEY);
-        registerRequest.setToken(Constant.TOKEN);
+        registerRequest.setUrl(DingDingConstant.CALLBACK_URL_HOST + "/callback");
+        registerRequest.setAesKey(DingDingConstant.ENCODING_AES_KEY);
+        registerRequest.setToken(DingDingConstant.TOKEN);
         registerRequest.setCallBackTag(Arrays.asList("bpms_instance_change", "bpms_task_change"));
         OapiCallBackRegisterCallBackResponse registerResponse = client.execute(registerRequest,AccessTokenUtil.getToken());
         if (registerResponse.isSuccess()) {

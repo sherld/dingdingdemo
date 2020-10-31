@@ -1,6 +1,6 @@
 package com.util;
 
-import com.config.Constant;
+import com.config.DingDingConstant;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.request.OapiGettokenRequest;
 import com.dingtalk.api.response.OapiGettokenResponse;
@@ -21,8 +21,8 @@ public class AccessTokenUtil {
             DefaultDingTalkClient client = new DefaultDingTalkClient(URL_GET_TOKKEN);
             OapiGettokenRequest request = new OapiGettokenRequest();
 
-            request.setAppkey(Constant.APPKEY);
-            request.setAppsecret(Constant.APPSECRET);
+            request.setAppkey(DingDingConstant.APPKEY);
+            request.setAppsecret(DingDingConstant.APPSECRET);
             request.setHttpMethod("GET");
             OapiGettokenResponse response = client.execute(request);
             String accessToken = response.getAccessToken();

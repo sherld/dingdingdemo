@@ -1,13 +1,11 @@
 package com.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.config.Constant;
-import com.config.URLConstant;
+import com.config.DingDingConstant;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.*;
 import com.dingtalk.api.response.*;
-import com.model.ProcessInstanceInputVO;
 import com.util.AccessTokenUtil;
 import com.util.LogFormatter;
 import com.util.LogFormatter.LogEvent;
@@ -46,7 +44,7 @@ public class WorkRecordController {
 			req.setTitle("title");
 
 			String id = userId + System.currentTimeMillis();
-			req.setUrl(Constant.CALLBACK_URL_HOST + "/workrecord/" + id + "/update");
+			req.setUrl(DingDingConstant.CALLBACK_URL_HOST + "/workrecord/" + id + "/update");
 			List<OapiWorkrecordAddRequest.FormItemVo> list2 = new ArrayList<>();
 			OapiWorkrecordAddRequest.FormItemVo obj3 = new OapiWorkrecordAddRequest.FormItemVo();
 			list2.add(obj3);

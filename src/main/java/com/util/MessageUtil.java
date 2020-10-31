@@ -1,6 +1,6 @@
 package com.util;
 
-import com.config.Constant;
+import com.config.DingDingConstant;
 import com.config.URLConstant;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
@@ -32,7 +32,7 @@ public class MessageUtil {
 
             OapiMessageCorpconversationAsyncsendV2Request messageRequest = new OapiMessageCorpconversationAsyncsendV2Request();
             messageRequest.setUseridList(recieverUserId);
-            messageRequest.setAgentId(Constant.AGENTID);
+            messageRequest.setAgentId(DingDingConstant.AGENTID);
             messageRequest.setToAllUser(false);
 
             OapiMessageCorpconversationAsyncsendV2Request.Msg msg = new OapiMessageCorpconversationAsyncsendV2Request.Msg();

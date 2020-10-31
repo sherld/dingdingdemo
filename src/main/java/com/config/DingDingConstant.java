@@ -3,7 +3,7 @@ package com.config;
 /**
  * 项目中的常量定义类
  */
-public class Constant {
+public class DingDingConstant {
     /**
      * 企业corpid, 需要修改成开发者所在企业
      */
